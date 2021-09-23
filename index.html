@@ -5,15 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My chat</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="/socket.io/socket.io.js"></script>
-    <script defer src="clint.js"></script>
+    <link rel="stylesheet" href="public/style.css">
+    <!-- <script defer src="/socket.io/socket.io.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js" integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 <body>
     <nav class="nav">
-        <img src="logo.png" alt="Mychat">
+        <img src="public/logo.png" alt="Mychat">
         <h3>Let's Chat Together :)</h3>
-
+        
     </nav>
     <div class="container">
         <!-- <div class="message right">
@@ -25,10 +26,11 @@
     </div>
     <div class="send">
         <form action="#" id="send-container">
-         <input type="text" name="messageinp" id="messageinp">
+            <input type="text" name="messageinp" id="messageinp">
          <button class="btn" type="submit">Send</button>
         </form>
     </div>
     
+    <script defer src="public/clint.js"></script>
 </body>
 </html>

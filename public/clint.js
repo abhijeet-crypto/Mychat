@@ -31,7 +31,7 @@ form.addEventListener('submit',(e)=>{
     messageinput.value="";
 })
 
-// alert("Do not refresh page while chatting");
+alert("Do not refresh page while chatting");
 do{
  user= prompt("Enter your name to join :");
 }while(!user);
