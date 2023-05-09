@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../public/style.css" />
+  <title>We Chat</title>
+</head>
+
+<body>
+  <section style="background-color: #eee">
+    <div class="container py-5" id="#container">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-13 col-lg-11 col-xl-11">
+          <div class="card" id="chat2">
+            <div class="card-header d-flex justify-content-between align-items-center p-3">
+              <h5 class="mb-0">Chat</h5>
+              <button type="button" class="btn btn-primary btn-sm" data-mdb-ripple-color="dark">
+                Let's Chat App
+              </button>
+            </div>
+            <div class="card-body" style="position: relative; height: 65vh; overflow-y: scroll" id="scroller">
+                <!-- here div inserted -->
+            </div>
+            <form action="" id="message-form">
+              <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3" style="width: 40px; height: 100%" />
+                <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Type message" name="message" />
+                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-color="dark" style="padding: 10px">
+                  Send
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="/public/script.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const element = document.getElementById("#scroller");
+    element.scrollTop = element.scrollHeight - element.clientHeight;
+  </script>
+  <script>
+    var user;
+    const form = document.getElementById("message-form");
+    const messageinput = document.getElementById("exampleFormControlInput1");
+    const messagecontainer = document.querySelector('#scroller');
+
+    const append = (message, position) => {
+
+      if (position == 'friend')
+      {
+        const parentDiv = document.createElement('div');
+        parentDiv.classList.add('d-flex', 'flex-row', 'justify-content-start', 'friend')
+        const imgElement = document.createElement('img');
+        imgElement.setAttribute('src', 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp');
+        imgElement.style.width = '45px';
+        imgElement.style.height = '100%'
+        parentDiv.appendChild(imgElement);
+        const childDiv = document.createElement('div');
+        const newParagraph = document.createElement('p');
+        newParagraph.textContent = message;
+        newParagraph.classList.add('small', 'p-2', 'me-3', 'mb-1', 'text-white', 'rounded-3', 'bg-primary');
+        newParagraph.style.maxWidth = '500px';
+        childDiv.appendChild(newParagraph);
+        parentDiv.appendChild(childDiv);
+        messagecontainer.appendChild(parentDiv);
+      }
+      else{
+
+        const parentDiv = document.createElement('div');
+        parentDiv.classList.add('d-flex', 'flex-row', 'justify-content-end', 'mb-4','pt-1')
+        const imgElement = document.createElement('img');
+        imgElement.setAttribute('src', 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp');
+        imgElement.style.width = '45px';
+        imgElement.style.height = '100%'
+        const childDiv = document.createElement('div');
+        const newParagraph = document.createElement('p');
+        newParagraph.textContent = message;
+        newParagraph.classList.add('small', 'p-2', 'me-3', 'mb-1', 'text-white', 'rounded-3', 'bg-primary');
+        newParagraph.style.maxWidth = '500px';
+        childDiv.appendChild(newParagraph);
+        parentDiv.appendChild(childDiv);
+        parentDiv.appendChild(imgElement);
+        messagecontainer.appendChild(parentDiv);
+
+      }
+
+    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const msg = messageinput.value;
+      append(`You: ${msg}`,'owner');
+      socket.emit('send', msg);
+      messageinput.value = "";
+    });
+    const socket = io();
+
+    alert("Do not refresh page while chatting");
+    do {
+      user = prompt("Enter your name to join :");
+    } while (!user);
+
+    socket.emit("new-user-joined", user);
+    socket.on('user-joined', user => {
+      append(`${user} :-> Joined the chat`,'friend');
+    });
+
+    socket.on('recieve', data => {
+      append(`${user} :-> ${data.message}`,'friend');
+    });
+
+    socket.on('leave', user => {
+      append(`${user} :-> Left the chat`,'friend');
+    })
+  </script>
+</body>
+
+</html>

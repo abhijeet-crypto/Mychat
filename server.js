@@ -1,47 +1,51 @@
-const http = require("http");
-const path=require('path');
-
 const express = require("express");
+const app = express();
+const path = require("path");
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
 
-const app= express();
-const server=http.createServer(app);
+app.use(express.json());
+const PORT = process.env.PORT || 5000;
 
-const port=process.env.PORT || 3000;
+app.set("view engine", "ejs");
 
-app.use(express.static(path.join(__dirname+'/public')));
+app.set("views", path.join(__dirname, "views"));
 
-app.get('/',(req,res)=>{
-    res.sendFile(__dirname+'/index.html')
+app.use(express.static(path.join(__dirname, "views")));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.render("index");
 });
 
+const users = {};
+io.on("connection", (socket) => {
+  console.log("user connected");
 
-// Socket.io started  
-
-const users={};
-
-const io=require('socket.io')(server);
-
-io.on("connection",(socket)=>{
-  
-  socket.on('new-user-joined',(user)=>{
-      users[socket.id]=user;
-      console.log(users);
-      socket.broadcast.emit('user-joined',user)
-  });
- socket.on('send',(message)=>{
-      socket.broadcast.emit('recieve',{message: message,name: users[socket.id]});
+  socket.on("new-user-joined", (user) => {
+    users[socket.id] = user;
+    console.log(users);
+    socket.broadcast.emit("user-joined", user);
   });
 
-  socket.on('disconnect',(message)=>{
-    socket.broadcast.emit('left',users[socket.id]);
+  socket.on("send", (message) => {
+    socket.broadcast.emit("recieve", {
+      message: message,
+      name: users[socket.id],
+    });
+  });
+
+  socket.on("disconnect", (message) => {
+    socket.broadcast.emit("leave", users[socket.id]);
     delete users[socket.id];
+  });
 });
 
-});
+// http.listen(5000, () => {
+//     console.log('listening on *:5000');
+//   });
 
-
-
-
-server.listen(port,()=>{
-    console.log("server started at "+port);
+http.listen(PORT, () => {
+  console.log(`server running on port ${PORT}`);
 });
