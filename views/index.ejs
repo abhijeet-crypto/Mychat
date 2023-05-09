@@ -96,6 +96,7 @@
       e.preventDefault();
       const msg = messageinput.value;
       append(`You: ${msg}`,'owner');
+      messagecontainer.scrollTop = messagecontainer.scrollHeight;
       socket.emit('send', msg);
       messageinput.value = "";
     });
@@ -109,14 +110,17 @@
     socket.emit("new-user-joined", user);
     socket.on('user-joined', user => {
       append(`${user} :-> Joined the chat`,'friend');
+      messagecontainer.scrollTop = messagecontainer.scrollHeight;
     });
 
     socket.on('recieve', data => {
-      append(`${data.name}} :-> ${data.message}`,'friend');
+      append(`${data.name} :-> ${data.message}`,'friend');
+      messagecontainer.scrollTop = messagecontainer.scrollHeight;
     });
 
     socket.on('leave', user => {
       append(`${user} :-> Left the chat`,'friend');
+      messagecontainer.scrollTop = messagecontainer.scrollHeight;
     })
   </script>
 </body>
