@@ -21,11 +21,11 @@ app.get("/", (req, res) => {
 
 const users = {};
 io.on("connection", (socket) => {
-  console.log("user connected");
+  // console.log("user connected");
 
   socket.on("new-user-joined", (user) => {
     users[socket.id] = user;
-    console.log(users);
+    // console.log(users);
     socket.broadcast.emit("user-joined", user);
   });
 
