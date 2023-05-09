@@ -65,7 +65,8 @@
         const childDiv = document.createElement('div');
         const newParagraph = document.createElement('p');
         newParagraph.textContent = message;
-        newParagraph.classList.add('small', 'p-2', 'me-3', 'mb-1', 'text-white', 'rounded-3', 'bg-primary');
+        newParagraph.classList.add('small', 'p-2', 'me-3', 'mb-1', 'rounded-3');
+        newParagraph.style.backgroundColor='#d8e5f0';
         newParagraph.style.maxWidth = '500px';
         childDiv.appendChild(newParagraph);
         parentDiv.appendChild(childDiv);
