@@ -3,8 +3,8 @@ const app = express();
 const path = require("path");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http,{
-  pingTimeout: 30000, 
-  pingInterval: 20000, 
+  pingTimeout: 3000000, 
+  // pingInterval: 20000, 
 });
 
 app.use(express.json());
