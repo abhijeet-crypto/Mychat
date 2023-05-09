@@ -112,7 +112,7 @@
     });
 
     socket.on('recieve', data => {
-      append(`${user} :-> ${data.message}`,'friend');
+      append(`${data.name}} :-> ${data.message}`,'friend');
     });
 
     socket.on('leave', user => {
